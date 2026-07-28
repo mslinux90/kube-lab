@@ -35,17 +35,23 @@ pipeline {
         }
 
         stage('Deploy to Kubernetes') {
-            steps {
-                sh 'kubectl apply -f k8s/react_app.yml'
+            environment {
+                  KUBECONFIG = '/var/lib/jenkins/.kube/config'
+                   }
+                   steps {
+                       sh 'kubectl apply -f k8s/react_app.yml'
+                 }
             }
-        }
 
         stage('Verify Deployment') {
-            steps {
-                sh 'kubectl get deployment'
-                sh 'kubectl get pods -o wide'
-                sh 'kubectl get svc'
-            }
-        }
+            environment {
+                  KUBECONFIG = '/var/lib/jenkins/.kube/config'
+                   }
+                   steps {
+                      sh 'kubectl rollout status deployment/react-app'
+                      sh 'kubectl get pods -o wide'
+                      sh 'kubectl get svc'
+                          }
+                   }
     }
 }
