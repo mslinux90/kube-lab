@@ -10,7 +10,7 @@ pipeline {
             }
         }
 
-        stage('Install Node Modules') {
+        stage('Install Dependencies') {
             steps {
                 dir('frontend') {
                     sh 'npm install'
@@ -26,5 +26,26 @@ pipeline {
             }
         }
 
+        stage('Build Docker Image') {
+            steps {
+                dir('frontend') {
+                    sh 'docker build -t react-k8s:v2 .'
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh 'kubectl apply -f k8s/react_app.yml'
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                sh 'kubectl get deployment'
+                sh 'kubectl get pods -o wide'
+                sh 'kubectl get svc'
+            }
+        }
     }
 }
