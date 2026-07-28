@@ -1,0 +1,27 @@
+function App() {
+  return (
+    <div
+      style={{
+        textAlign: "center",
+        marginTop: "80px",
+        fontFamily: "Arial"
+      }}
+    >
+      <h1>🚀 DevOps Kubernetes Lab</h1>
+
+      <h2>Frontend Application</h2>
+
+      <h3>Version : v1</h3>
+
+      <hr />
+
+      <h3>Welcome Manoj!</h3>
+
+      <p>Linux | Docker | Kubernetes | React</p>
+
+      <p>This application is running inside Kubernetes.</p>
+    </div>
+  );
+}
+
+export default App;
