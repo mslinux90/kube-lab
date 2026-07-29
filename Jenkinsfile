@@ -30,7 +30,6 @@ pipeline {
             steps {
                 dir('frontend') {
                      sh 'docker build -t react-k8s:${BUILD_NUMBER} .'
-#                    sh 'docker build -t react-k8s:v2 .'
                 }
             }
         }
