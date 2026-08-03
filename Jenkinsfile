@@ -29,29 +29,63 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 dir('frontend') {
-                     sh 'docker build -t react-k8s:${BUILD_NUMBER} .'
+                    sh 'docker build -t react-k8s:${BUILD_NUMBER} .'
                 }
             }
         }
 
-        stage('Deploy to Kubernetes') {
-            environment {
-                  KUBECONFIG = '/var/lib/jenkins/.kube/config'
-                   }
-                   steps {
-                       sh 'kubectl apply -f k8s/react_app.yml'
-                 }
+        stage('Tag Docker Image') {
+            steps {
+                sh '''
+                  docker tag react-k8s:${BUILD_NUMBER} \
+                  mslinux90/react-k8s:${BUILD_NUMBER}
+                  '''
             }
+        }
 
-        stage('Verify Deployment') {
-            environment {
-                  KUBECONFIG = '/var/lib/jenkins/.kube/config'
-                   }
-                   steps {
-                      sh 'kubectl rollout status deployment/react-app'
-                      sh 'kubectl get pods -o wide'
-                      sh 'kubectl get svc'
-                          }
-                   }
+        stage('Push Docker Image') {
+            steps {
+                 withCredentials([usernamePassword(
+                 credentialsId: 'dockerhub-creds',
+                 usernameVariable: 'DOCKER_USER',
+                 passwordVariable: 'DOCKER_PASS'
+        )]) {
+                 sh '''
+                 echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                 docker push mslinux90/react-k8s:${BUILD_NUMBER}
+                 docker logout
+                 '''
+                }
+            }
+        }
+
+        stage('Deploy using Ansible') {
+            steps {
+               dir("${WORKSPACE}") {  
+                sh '''
+                ansible-playbook \
+                -i ansible/inventory \
+                ansible/deploy.yml \
+                -e image_tag=${BUILD_NUMBER}
+                '''
+            }
+        }
     }
 }
+ 
+        post {
+
+        success {
+            echo "Deployment Successful"
+        }
+
+        failure {
+            echo "Deployment Failed"
+        }
+
+        always {
+            sh 'docker images | grep react-k8s || true'
+        }
+    }
+}
+

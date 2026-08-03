@@ -1,0 +1,5 @@
+---
+docker_user: mslinux90
+image_name: react-k8s
+deployment_name: react-app
+kubeconfig: /var/lib/jenkins/.kube/config

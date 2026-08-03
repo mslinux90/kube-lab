@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: react
-        image: mslinux90/react-k8s:v1
+        image: {{ docker_user }}/{{ image_name }}:{{ image_tag }}
         imagePullPolicy: Always
         ports:
         - containerPort: 80
