@@ -26,7 +26,6 @@
       args:
         chdir: /opt/kube-lab
 
-
     - name: Display Pods
       command: kubectl get pods -o wide
       register: pods
