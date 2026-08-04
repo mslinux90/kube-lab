@@ -14,17 +14,18 @@
     - name: Generate Deployment YAML
       template:
         src: react_app.yml.j2
-        dest: /root/kube-lab/k8s/react_app.yml
+        dest: /opt/kube-lab/k8s/react_app.yml
 
     - name: Apply Deployment
       command: kubectl apply -f k8s/react_app.yml
       args:
-        chdir: /root/kube-lab
+        chdir: /opt/kube-lab
 
     - name: Wait for Deployment
       command: kubectl rollout status deployment/{{ deployment_name }}
       args:
-        chdir: /root/kube-lab
+        chdir: /opt/kube-lab
+
 
     - name: Display Pods
       command: kubectl get pods -o wide
