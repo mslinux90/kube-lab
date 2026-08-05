@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: react
-        image: mslinux90/react-k8s:v1
+        image: mslinux90/react-k8s:9
         imagePullPolicy: Always
         ports:
         - containerPort: 80
