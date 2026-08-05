@@ -3,7 +3,7 @@ kind: Deployment
 
 metadata:
   name: react-app
-  namespace: {{ namespace_name }}
+  namespace: {{ k8s_namespace }}
 
 spec:
   replicas: 2
@@ -31,7 +31,7 @@ kind: Service
 
 metadata:
   name: react-service
-  namespace: {{ namespace_name }}
+  namespace: {{ k8s_namespace }}
 
 spec:
   selector:
