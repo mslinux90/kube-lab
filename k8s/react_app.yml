@@ -3,7 +3,7 @@ kind: Deployment
 
 metadata:
   name: react-app
-  namespace: reach-dev
+  namespace: react-dev
 
 spec:
   replicas: 2
@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: react
-        image: mslinux90/react-k8s:1
+        image: mslinux90/react-k8s:3
         imagePullPolicy: Always
         ports:
         - containerPort: 80
@@ -31,7 +31,7 @@ kind: Service
 
 metadata:
   name: react-service
-  namespace: reach-dev
+  namespace: react-dev
 
 spec:
   selector:

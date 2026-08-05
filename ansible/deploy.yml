@@ -22,12 +22,12 @@
         chdir: /opt/kube-lab
 
     - name: Wait for Deployment
-      command: kubectl rollout status deployment/{{ deployment_name }}
+      command: kubectl rollout status deployment/{{ deployment_name }} -n {{ namespace }}
       args:
         chdir: /opt/kube-lab
 
     - name: Display Pods
-      command: kubectl get pods -o wide
+      command: kubectl get pods -n {{ namespace }} -o wide
       register: pods
 
     - debug:
