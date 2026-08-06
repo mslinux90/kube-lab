@@ -1,6 +1,8 @@
 ---
 # Kubernetes
 k8s_namespace: react-dev
+kubeconfig: /var/lib/jenkins/.kube/config
+
 
 # Deployment
 deployment_name: react-app
