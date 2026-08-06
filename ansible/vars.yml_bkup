@@ -1,0 +1,11 @@
+---
+docker_user: mslinux90
+image_name: react-k8s
+deployment_name: react-app
+kubeconfig: /var/lib/jenkins/.kube/config
+k8s_namespace: react-dev
+cpu_request: "100m"
+memory_request: "128Mi"
+
+cpu_limit: "500m"
+memory_limit: "512Mi"

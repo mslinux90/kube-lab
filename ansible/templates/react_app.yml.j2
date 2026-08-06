@@ -2,11 +2,24 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: react-app
+  name: {{ deployment_name }}
   namespace: {{ k8s_namespace }}
+  labels:
+    app: react
+    environment: dev
+    project: kube-lab
+    team: devops
+  
+  annotations:
+    deployed-by: Jenkins
+    managed-by: Ansible
+    project: Kubernetes-Lab
+    owner: Devops_team
+    Manager: Manoj
+    contact-email: devops@abc.com
 
 spec:
-  replicas: 2
+  replicas: {{ replicas }}
 
   selector:
     matchLabels:
@@ -16,22 +29,42 @@ spec:
     metadata:
       labels:
         app: react
+        environment: dev
+        project: kube-lab
+        team: devops
 
     spec:
       containers:
       - name: react
         image: {{ docker_user }}/{{ image_name }}:{{ image_tag }}
         imagePullPolicy: Always
+ 
         ports:
         - containerPort: 80
+ 
+        resources:
+          requests:
+            cpu: "{{ cpu_request }}"
+            memory: "{{ memory_request }}"
+
+          limits:
+            cpu: "{{ cpu_limit }}"
+            memory: "{{ memory_limit }}"    
+
+ 
 
 ---
 apiVersion: v1
 kind: Service
 
 metadata:
-  name: react-service
+  name: {{ service_name }}
   namespace: {{ k8s_namespace }}
+  labels:
+    app: react
+    environment: dev
+    project: kube-lab
+    team: devops
 
 spec:
   selector:
@@ -41,6 +74,6 @@ spec:
 
   ports:
   - protocol: TCP
-    port: 80
-    targetPort: 80
-    nodePort: 30000
+    port: {{ service_port }} 
+    targetPort: {{ target_port }}
+    nodePort: {{ node_port }}
