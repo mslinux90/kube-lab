@@ -36,7 +36,7 @@ spec:
     spec:
       containers:
       - name: react
-        image: mslinux90/react-k8s:7
+        image: mslinux90/react-k8s:8
         imagePullPolicy: Always
  
         ports:
@@ -52,6 +52,16 @@ spec:
             memory: "512Mi"    
 
  
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+
+        initialDelaySeconds: 10
+        periodSeconds: 5
+        timeoutSeconds: 2
+        successThreshold: 1
+        failureThreshold: 3
 
 ---
 apiVersion: v1
