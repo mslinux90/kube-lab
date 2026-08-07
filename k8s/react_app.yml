@@ -4,6 +4,19 @@ kind: Deployment
 metadata:
   name: react-app
   namespace: react-dev
+  labels:
+    app: react
+    environment: dev
+    project: kube-lab
+    team: devops
+  
+  annotations:
+    deployed-by: Jenkins
+    managed-by: Ansible
+    project: Kubernetes-Lab
+    owner: Devops_team
+    Manager: Manoj
+    contact-email: devops@abc.com
 
 spec:
   replicas: 2
@@ -16,14 +29,29 @@ spec:
     metadata:
       labels:
         app: react
+        environment: dev
+        project: kube-lab
+        team: devops
 
     spec:
       containers:
       - name: react
-        image: mslinux90/react-k8s:5
+        image: mslinux90/react-k8s:7
         imagePullPolicy: Always
+ 
         ports:
         - containerPort: 80
+ 
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+
+          limits:
+            cpu: "500m"
+            memory: "512Mi"    
+
+ 
 
 ---
 apiVersion: v1
@@ -32,6 +60,11 @@ kind: Service
 metadata:
   name: react-service
   namespace: react-dev
+  labels:
+    app: react
+    environment: dev
+    project: kube-lab
+    team: devops
 
 spec:
   selector:
@@ -41,6 +74,6 @@ spec:
 
   ports:
   - protocol: TCP
-    port: 80
+    port: 80 
     targetPort: 80
     nodePort: 30000
